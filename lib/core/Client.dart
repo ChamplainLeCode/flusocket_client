@@ -24,10 +24,12 @@ class SlerverIO {
 
   close() async {
     try {
+      print("-- Client 1 $_client");
+      //_dataStream.close();
+      //print("-- Client 2 ${_client.close()}");
+
+      // if (_client != null) _client.destroy();
       _redirectRoute?.close();
-      //_client?.close();
-      _client?.destroy();
-      _dataStream.close();
     } catch (e, stack) {
       errorManager(e, stack);
     }
@@ -112,7 +114,6 @@ class SlerverIO {
     try {
       _dataStream.add(Uint8List.fromList(
           '##SLERVERBEGIN##${json.encode(data)}##SLERVEREND##'.codeUnits));
-      print('no error is closed ? = ${_dataStream.isClosed}');
     } on StateError catch (e, stack) {
       errorManager(e, stack);
       reconnect;
@@ -124,7 +125,7 @@ class SlerverIO {
 
 class SlerverIORedirectRoute {
   final StreamController<MapEntry<String, dynamic>> controller =
-      StreamController();
+      StreamController.broadcast();
 
   close() {
     controller?.close();

@@ -14,7 +14,10 @@ class SlerverIORouter {
   static const int maxReconnectionTimes = 30;
 
   SlerverIORouter(this._client) : assert(_client != null) {
-    if (_client.autoReconnect) setClientAutoReconnect(1);
+    if (_client.autoReconnect)
+      setClientAutoReconnect(10);
+    else
+      setClientAutoReconnect(1);
   }
 
   void on(String path, dynamic callback) {
