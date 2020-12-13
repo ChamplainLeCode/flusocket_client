@@ -1,6 +1,6 @@
 # flusocket_client
 
-This plugin provide client way to interconnect flutter app.<br>
+This plugin provides client way to interconnect flutter app.<br>
 ##### Learn more at [Bixterprise.com](flutter.bixterprise.com)
 ## Usage
 
