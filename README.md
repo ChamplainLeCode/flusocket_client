@@ -1,15 +1,50 @@
 # flusocket_client
 
-A new flutter plugin project.
+This plugin provide client way to interconnect flutter app.<br>
+##### Learn more at [Bixterprise.com](flutter.bixterprise.com)
+## Usage
 
-## Getting Started
+Lets take a look at how to use `SlerverIO` to connect two Flutter app for data sharing on both Android and iOS.
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+Create the client that we will use to connect.
+``` Dart
+SlerverIO client;
+```
+Initilialize response from flutter Server App.
+``` Dart
+initClient ( ) async {
+ client = await SlerverIO.connect('10.42.0.241', 9000, autoReconnect: true);
+}
+```
+Now we add response triggers by using  `SlerverIORedirectRoute` from `SlerverIO`
+``` Dart
+onResponse ( ) {
+ var io = client.router;
+  io
+   ..on('/name', (Map<String, dynamic> params) {
+    print(params['message']);
+   })
+   ..on('/surname', (List params) {
+    print('${params.first} => ${params.last}');
+   })
+   ..on('connect', () {
+    print('Connected successfully');
+   });
+}
+```
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Now lets define function uses to send data to server
 
+``` Dart
+writeSomething() {
+    client
+      ..send({
+         'path': '/register',
+         'params': {'name': 'Bakop', 'surname': 'Champlain'}
+      })
+      ..send({
+         'path': '/findAll',
+         'params': ['Champlain', 'Manuel', 'Cabrel', 'Jordan']
+      });
+}
+```

@@ -2,12 +2,7 @@ import 'package:flusocket_client/core/Client.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-//  runApp(MyApp());
-  int i = 0;
-  Future.doWhile(() async {
-    if (i++ < 0xA) await Future.delayed(Duration(seconds: 3));
-    print('Waigin $i');
-  });
+  runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {

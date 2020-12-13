@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -43,7 +44,6 @@ class SlerverIORouter {
         Future.delayed(Duration(seconds: 1),
             () => doRouting({'path': SlerverIOConstants.CONNECT_PATH}));
         break;
-//      doRouting({'path': SlerverIOConstants.CONNECT_PATH});
       } else
         setError();
 
@@ -51,26 +51,6 @@ class SlerverIORouter {
       await Future.delayed(Duration(seconds: Duration.secondsPerMinute >> 3));
       time--;
     }
-//       while (time > 0) {
-//         if (_client.connected) {
-//           setAdditionalPath();
-//           if (_client.connected) {
-//             _client.getClient().listen(applyRouting)
-//               ..onError(_client.errorManager)
-//               ..onDone();
-//             Future.delayed(Duration(seconds: 1),
-//                 () => doRouting({'path': SlerverIOConstants.CONNECT_PATH}));
-
-// //      doRouting({'path': SlerverIOConstants.CONNECT_PATH});
-//           } else
-//             setError();
-//           if (time <= 0) break;
-//         }
-//         ;
-//         await _client.reconnect;
-//         await Future.delayed(Duration(seconds: Duration.secondsPerMinute >> 3));
-//         time--;
-//       }
   }
 
   setError() {
@@ -79,8 +59,6 @@ class SlerverIORouter {
 
   void applyRouting(Uint8List data) async {
     StringBuffer content = StringBuffer();
-
-    // _logger.log('New client connected at {}', [client.address.host]);
 
     content.write(String.fromCharCodes(data));
     while (content.length > SlerverIOConstants.MIN_SIZE) {

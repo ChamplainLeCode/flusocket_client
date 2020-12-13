@@ -24,11 +24,6 @@ class SlerverIO {
 
   close() async {
     try {
-      print("-- Client 1 $_client");
-      //_dataStream.close();
-      //print("-- Client 2 ${_client.close()}");
-
-      // if (_client != null) _client.destroy();
       _redirectRoute?.close();
     } catch (e, stack) {
       errorManager(e, stack);
@@ -47,17 +42,21 @@ class SlerverIO {
         ._initClient();
   }
 
+  StreamController<Uint8List> get getDataStream => _dataStream;
+
   Future<SlerverIO> _initClient() async {
     try {
       if (_client == null) _client = await Socket.connect(address, port);
       l.log('Client connected to {} port {} ',
           [_client.address.host, _client.port]);
       if (_dataStream == null || _dataStream.isClosed)
-        _dataStream = StreamController(
-            onCancel: close, onPause: onPause, onResume: onResume);
+        _dataStream = StreamController.broadcast(onCancel: close);
 
       /// To manage our socket we bind to a Stream Controller
-      _client.addStream(_dataStream.stream);
+      try {
+        //  _dataStream.addStream(_client);
+        _client.addStream(_dataStream.stream);
+      } catch (e) {}
       _dataStream.stream.handleError(errorManager);
 
       _redirectRoute.controller.stream.listen((entry) {
@@ -113,7 +112,8 @@ class SlerverIO {
   send(Map<String, Object> data) {
     try {
       _dataStream.add(Uint8List.fromList(
-          '##SLERVERBEGIN##${json.encode(data)}##SLERVEREND##'.codeUnits));
+          '${SlerverIOConstants.BEGIN}${json.encode(data)}${SlerverIOConstants.END}'
+              .codeUnits));
     } on StateError catch (e, stack) {
       errorManager(e, stack);
       reconnect;

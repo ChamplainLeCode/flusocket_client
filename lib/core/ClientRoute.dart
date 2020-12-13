@@ -1,5 +1,3 @@
-//typedef ArgumentCallback = void Function<String>(String params);
-
 typedef ArgumentCallback<T, M> = Future<T> Function(M);
 
 class SlerverIORoute {
